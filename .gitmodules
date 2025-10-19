@@ -1,0 +1,6 @@
+[submodule "ROIExtractionPLA"]
+	path = ROIExtractionPLA
+	url = git@github.com:JTop03/ROIExtractionPLA.git
+[submodule "ESPController"]
+	path = ESPController
+	url = git@github.com:Zasasas20/ESPController.git
