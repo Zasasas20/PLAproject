@@ -4,3 +4,6 @@
 [submodule "ESPController"]
 	path = ESPController
 	url = git@github.com:Zasasas20/ESPController.git
+[submodule "Color-detection-PLA"]
+	path = Color-detection-PLA
+	url = git@github.com:rdo164/Color-detection-PLA.git
