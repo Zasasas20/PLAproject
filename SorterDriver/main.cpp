@@ -2,6 +2,7 @@
 #include <commandInterface.hpp>
 #include <opencv2/opencv.hpp>
 #include <ROIextractionUtils.hpp>
+#include <hue_histogram.hpp>
 
 using namespace cv;
 

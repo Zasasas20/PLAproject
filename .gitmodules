@@ -7,3 +7,6 @@
 [submodule "Color-detection-PLA"]
 	path = Color-detection-PLA
 	url = git@github.com:rdo164/Color-detection-PLA.git
+[submodule "Feature-extraction-C-"]
+	path = Feature-extraction-C-
+	url = https://github.com/rdo164/Feature-extraction-C-.git

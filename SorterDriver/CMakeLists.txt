@@ -8,6 +8,7 @@ include_directories(
         ${PROJECT_SOURCE_DIR}/src
         ${PROJECT_SOURCE_DIR}/lib/ROIExtractionPLA/include
         ${PROJECT_SOURCE_DIR}/lib/ROIExtractionPLA/src
+        ${PROJECT_SOURCE_DIR}/lib/Feature-extraction-C-/
 )
 
 file(GLOB all_SRCS
@@ -15,6 +16,7 @@ file(GLOB all_SRCS
         "${PROJECT_SOURCE_DIR}/src/*.cpp"
         "${PROJECT_SOURCE_DIR}/lib/ROIExtractionPLA/include/*.cpp"
         "${PROJECT_SOURCE_DIR}/lib/ROIExtractionPLA/src/*.hpp"
+        "${PROJECT_SOURCE_DIR}/lib/Feature-extraction-C-/*.hpp"
 )
 
 find_package( OpenCV REQUIRED )
