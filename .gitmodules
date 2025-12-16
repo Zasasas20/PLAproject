@@ -13,6 +13,4 @@
 [submodule "PlaHMI"]
 	path = PlaHMI
 	url = https://github.com/JTop03/PlaHMI.git
-[submodule "PlaUI"]
-	path = PlaUI
-	url = https://github.com/JTop03/PlaHMI.git
+
