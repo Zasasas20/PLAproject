@@ -3,31 +3,37 @@
 #include <opencv2/opencv.hpp>
 #include <ROIextractionUtils.hpp>
 #include <hue_histogram.hpp>
+#include <lccv.hpp>
+#include <libcamera_app.hpp>
 
 using namespace cv;
 
 int main(int, char**){
     Mat frame;
+    lccv::PiCamera cam;
 
-    VideoCapture captureObject = VideoCapture(4);
+    cam.options->video_width=1280;
+    cam.options->video_height=720;
+    cam.options->framerate=30;
+    cam.options->verbose=true;
     std::cout << "Hello, from SorterDriver!\n";
 
-    captureObject >> frame;
+    cam.startVideo();
 
-    captureObject.set(CAP_PROP_FRAME_WIDTH, 1280);
-    captureObject.set(CAP_PROP_FRAME_HEIGHT, 720);
+    while (waitKey(15) != 27) {
+        if (!cam.getVideoFrame(frame,1000)) std::cout << "timed out!";
+        else {
+            while (waitKey(15) != 27)
+            {
+                imshow("src", frame);
+                cam.getVideoFrame(frame,1000);
+            }
+            std::vector<Mat> images = (getROIs(frame, ROIExtractionSetup(frame).rois));
 
-    if (frame.data) {
-        while (waitKey(15) != 27)
-        {
-            captureObject >> frame;
-            imshow("src", frame);
-        }
-        std::vector<Mat> images = (getROIs(frame, ROIExtractionSetup(frame).rois));
-
-        for (Mat & roi : images) {
-            imshow("roi", roi);
-            while (waitKey(15) != 27);
+            for (Mat & roi : images) {
+                imshow("roi", roi);
+                while (waitKey(15) != 27);
+            }
         }
     }
 
