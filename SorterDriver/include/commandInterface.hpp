@@ -14,8 +14,6 @@ class CommandUtils {
         bool pushValve(int valveID);
         int setTimer(int valveID, int timer);
         bool isValveAvailable(int valveID);
-        int setActiveVavles(int amountOfValves);
-
         void initInterface(std::string path, py::module_& interface);
 
         py::module_ & getESPinterface();

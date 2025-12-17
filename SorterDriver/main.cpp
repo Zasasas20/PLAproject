@@ -1,10 +1,9 @@
 #include <iostream>
-#include <commandInterface.hpp>
-#include <opencv2/opencv.hpp>
 #include <ROIextractionUtils.hpp>
-#include <hue_histogram.hpp>
+#include <valve.hpp>
 #include <lccv.hpp>
 #include <libcamera_app.hpp>
+#include <commandInterface.hpp>
 
 using namespace cv;
 
@@ -16,18 +15,30 @@ int main(int, char**){
     cam.options->video_height=720;
     cam.options->framerate=30;
     cam.options->verbose=true;
-    std::cout << "Hello, from SorterDriver!\n";
-
     cam.startVideo();
+    std::cout << "Initialized camera!" << '\n';
+
+    CommandUtils * interface = new CommandUtils();
+    interface->initInterface("valveInterface", interface->getESPinterface());
+    std::cout << "Initialized interface!" << '\n';
+
+    std::vector<Valve> valves;
+
+    valves.push_back({Valve(1, 0.5, 10, 0, false, interface)});
+    valves.push_back({Valve(2, 0.5, 10, 0, false, interface)});
+    valves.push_back({Valve(3, 0.5, 10, 0, false, interface)});
+    valves.push_back({Valve(4, 0.5, 10, 0, false, interface)});
+    valves.push_back({Valve(5, 0.5, 10, 0, false, interface)});
+    valves.push_back({Valve(6, 0.5, 10, 0, false, interface)});
+
+    bool success = true;
+    for (Valve v: valves) {success = success && v.push();}
+    std::cout << "Valve initiation successful? " << success << '\n';
 
     while (waitKey(15) != 27) {
         if (!cam.getVideoFrame(frame,1000)) std::cout << "timed out!";
         else {
-            while (waitKey(15) != 27)
-            {
-                imshow("src", frame);
-                cam.getVideoFrame(frame,1000);
-            }
+            cam.getVideoFrame(frame,1000);
             std::vector<Mat> images = (getROIs(frame, ROIExtractionSetup(frame).rois));
 
             for (Mat & roi : images) {
@@ -36,9 +47,4 @@ int main(int, char**){
             }
         }
     }
-
-    // CommandUtils interface = CommandUtils();
-    // interface.initInterface("valveInterface", interface.getESPinterface());
-    // if (interface.pushValve('A')) std::cout << "success";
-    // else std::cout << "fail";
 }

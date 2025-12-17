@@ -17,11 +17,6 @@ bool CommandUtils::isValveAvailable(int valveID) {
     return (int)(response[0] - '0');
 }
 
-int CommandUtils::setActiveVavles(int amountOfValves) {
-    std::string response = mESPInterface.attr("updateValveCount")(amountOfValves).cast<std::string>();
-    return (int)(response[0] - '0');
-}
-
 void CommandUtils::initInterface(std::string path, py::module_& interface) {
     interface = py::module_::import(path.c_str());
 }
