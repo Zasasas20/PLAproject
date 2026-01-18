@@ -39,7 +39,8 @@ int main(int, char**){
         if (!cam.getVideoFrame(frame,1000)) std::cout << "timed out!";
         else {
             cam.getVideoFrame(frame,1000);
-            std::vector<Mat> images = (getROIs(frame, ROIExtractionSetup(frame).rois));
+            ROIContext context = ROIExtractionSetup(frame);
+            std::vector<Mat> images = (getROIs(frame, context.rois));
 
             for (Mat & roi : images) {
                 imshow("roi", roi);
