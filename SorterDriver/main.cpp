@@ -24,27 +24,43 @@ int main(int, char**){
 
     std::vector<Valve> valves;
 
-    valves.push_back({Valve(1, 0.5, 10, 0, false, interface)});
-    valves.push_back({Valve(2, 0.5, 10, 0, false, interface)});
-    valves.push_back({Valve(3, 0.5, 10, 0, false, interface)});
-    valves.push_back({Valve(4, 0.5, 10, 0, false, interface)});
-    valves.push_back({Valve(5, 0.5, 10, 0, false, interface)});
-    valves.push_back({Valve(6, 0.5, 10, 0, false, interface)});
+    valves.push_back({Valve(1, 0.5, 10, 0, false, interface)}); // Red (0-10 and 170-180)
+    valves.push_back({Valve(2, 0.5, 10, 150, false, interface)}); // Purple (140-160)
+    valves.push_back({Valve(3, 0.5, 5, 30, false, interface)}); // Yellow (25-35)
+    valves.push_back({Valve(4, 0.5, 10, 0, false, interface)}); // Red (0-10 and 170-180)
+    valves.push_back({Valve(5, 0.5, 15, 55, false, interface)}); // Green (40-70)
+    valves.push_back({Valve(6, 0.5, 20, 110, false, interface)}); // Blue (90-130)
 
     bool success = true;
+    bool initialized = false;
     for (Valve v: valves) {success = success && v.push();}
     std::cout << "Valve initiation successful? " << success << '\n';
+    ROIContext context;
 
     while (waitKey(15) != 27) {
-        if (!cam.getVideoFrame(frame,1000)) std::cout << "timed out!";
+        if (!cam.getVideoFrame(frame,1000)) std::cout << "timed out!" << '\n';
         else {
             cam.getVideoFrame(frame,1000);
-            ROIContext context = ROIExtractionSetup(frame);
-            std::vector<Mat> images = (getROIs(frame, context.rois));
+            Mat rotated;
+            rotate(frame, rotated, ROTATE_180);
+            if (!initialized) {
+                context = ROIExtractionSetup(rotated);
+                if(context.pumps.size() > 0) initialized = true;
+            }
+            std::vector<Mat> images = (getROIs(rotated, context.rois));
 
-            for (Mat & roi : images) {
-                imshow("roi", roi);
-                while (waitKey(15) != 27);
+            int i = 1;
+            if (context.rois.size() <= 6 && context.rois.size() > 2) {
+                for (Mat & roi : images) {
+                    if (!roi.empty()) {
+                        std::string name = "roi";
+                        name += std::to_string(i);
+                        imshow(name, roi);
+                        bool result = valves[6-i].toPush(roi);
+                        if (result) std::cout << valves[6-i].push() << '\n';
+                        i++;
+                    }
+                }  
             }
         }
     }

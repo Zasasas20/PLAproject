@@ -21,6 +21,7 @@ class Valve {
 
         bool isAvailable();
         bool push();
+        bool toPush(Mat image);
         // bool isActive();
         // void activate();
         // void deactivate();

@@ -1,6 +1,6 @@
 #include "valve.hpp"
-#include <hue_histogram.hpp>
 #include <commandInterface.hpp>
+#include <hue_histogram.hpp>
 
 Valve::Valve(int id, float sensitivity, int window, int desiredHue, bool exclude, CommandUtils* interfaceRef): 
     mId{id},
@@ -63,4 +63,8 @@ config Valve::getConfig(Mat image) {
         mHue,
         mExclude
     };
+}
+
+bool Valve::toPush(Mat image) {
+    return run_pipeline(getConfig(image));
 }
